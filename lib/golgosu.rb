@@ -37,6 +37,10 @@ class Golgosu < Hasu::Window
     case id
       when Gosu::KbEscape
         close
+      when Gosu::KbD
+        @world.kill_all
+      when Gosu::KbF
+        @world.revive_all
     end
   end
 end

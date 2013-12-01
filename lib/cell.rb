@@ -8,8 +8,8 @@ class Cell
   def initialize(x, y, state = random_state)
     @x, @y = x, y
     @state, @next_state = state
-    alive? ? live : die
     @reincarnations = 0
+    alive? ? live : die
   end
 
   def update
@@ -26,7 +26,6 @@ class Cell
 
   def random_state
     state = rand > 0.5 ? :alive : :dead
-    alive? ? live : die
     state
   end
 
