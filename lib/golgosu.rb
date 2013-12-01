@@ -13,30 +13,25 @@ class Golgosu < Hasu::Window
 
   def reset
     @world = World.new(self,128, 96)
-    @generation = 0
+    @frames = 0
     @elapsed_time = 0
-    @font = Gosu::Font.new(self, 'Arial', 48)
+    @font = Gosu::Font.new(self, 'Arial', 24)
   end
 
   def update
-
-    @elapsed_time = Gosu::milliseconds()
-
-    if (@generation % 6 == 0)
+    if (@frames % 1 == 0)
       @world.update
-      p "updating"
     end
-    @generation +=1
+    @frames +=1
   end
 
   def draw
     @world.draw self
-    @font.draw(@generation, 30, 30, 0)
-    @font.draw(@world.alive_cells, WIDTH - 100, 30, 0)
-    @font.draw(Gosu.fps, WIDTH/2, 30, 0)
-    #@font.draw(@elapsed_time, WIDTH/2, 30, 0)
+    @font.draw(@frames, 30, 20, 0)
+    @font.draw("gen #{@world.generations}", 30, 50, 0)
+    @font.draw("alive: #{@world.alive_cells}", WIDTH - 100, 30, 0)
+    @font.draw("fps: #{Gosu.fps}", 30, 80, 0)
   end
-
 
   def button_down(id)
     case id
@@ -44,7 +39,6 @@ class Golgosu < Hasu::Window
         close
     end
   end
-
 end
 
 Golgosu.run

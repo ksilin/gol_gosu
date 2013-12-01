@@ -3,21 +3,21 @@ class Cell
   SIZE = 4
 
   attr_reader :x, :y, :color, :state
+  attr_reader :next_state
 
-  def initialize(x, y, state = random_state, color = Gosu::Color::WHITE)
-    @x = x
-    @y = y
-    @state = state
-    @color = color
+  def initialize(x, y, state = random_state)
+    @x, @y = x, y
+    @state, @next_state = state
+    alive? ? live : die
+    @reincarnations = 0
   end
 
   def update
-    case @state
-    when :alive
-      brighter
-    when :dead
-      dimmer
-    end
+    alive? ? brighter : dimmer
+  end
+
+  def switch_to_next_state
+    @state = @next_state
   end
 
   def alive?
@@ -25,20 +25,21 @@ class Cell
   end
 
   def random_state
-    rand > 0.5 ? :alive : :dead
-
+    state = rand > 0.5 ? :alive : :dead
+    alive? ? live : die
+    state
   end
 
-  def dimmer(factor = 0.99)
-    @color.value *= factor unless @color.value <= 0
+  def die
+    @next_state = :dead
+    @color = Gosu::Color::BLACK
   end
 
-  def brighter(factor = 1.05)
-    @color.value *= factor unless @color.value >= 1
+  def live
+    @next_state = :alive
+    @reincarnations +=1
+    @color = Gosu::Color.from_hsv((@reincarnations*5)%360, 1.0, 1.0)
   end
-
-  def die; @state = :dead; end
-  def live; @state = :alive; end
 
   def x1; @x - SIZE/2;  end
 
@@ -50,8 +51,7 @@ class Cell
 
   def draw(window)
 
-    color = alive? ? Gosu::Color::YELLOW : Gosu::Color::GRAY
-
+    #color = alive? ? Gosu::Color::YELLOW : Gosu::Color::GRAY
     window.draw_quad(
         x1, y1, color,
         x2, y1, color,
