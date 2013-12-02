@@ -12,17 +12,22 @@ class Golgosu < Hasu::Window
   end
 
   def reset
-    @world = World.new(self,128, 96)
+    @world = World.new(128, 96)
     @frames = 0
     @elapsed_time = 0
     @font = Gosu::Font.new(self, 'Arial', 24)
   end
 
   def update
+    @frames +=1
+
     if (@frames % 1 == 0)
       @world.update
     end
-    @frames +=1
+
+    if button_down? Gosu::MsLeft
+      @world.revive_around((mouse_x), (mouse_y))
+    end
   end
 
   def draw
@@ -42,6 +47,10 @@ class Golgosu < Hasu::Window
       when Gosu::KbF
         @world.revive_all
     end
+  end
+
+  def needs_cursor?
+    true
   end
 end
 

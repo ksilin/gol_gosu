@@ -1,6 +1,6 @@
 class Cell
 
-  SIZE = 4
+  SIZE = 2
 
   attr_reader :x, :y, :color, :state
   attr_reader :next_state
@@ -48,14 +48,14 @@ class Cell
 
   def y2; @y + SIZE/2;  end
 
-  def draw(window)
+  def draw(window, x_factor, y_factor)
 
     #color = alive? ? Gosu::Color::YELLOW : Gosu::Color::GRAY
     window.draw_quad(
-        x1, y1, color,
-        x2, y1, color,
-        x2, y2, color,
-        x1, y2, color
+        x1*x_factor, y1*x_factor, color,
+        x2*x_factor, y1*x_factor, color,
+        x2*x_factor, y2*x_factor, color,
+        x1*x_factor, y2*x_factor, color
     )
   end
 

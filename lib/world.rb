@@ -15,26 +15,27 @@ class World
   # Any live cell with more than three live neighbours dies, as if by overcrowding.
   # Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
   #[[3, 6, 7, 8], [3, 4, 6, 7, 8]]
-  [[3], [1, 2, 3, 4, 5]]
-  [[3], [4, 5, 6, 7, 8]]
-
-  def initialize(window, width = WIDTH, height = HEIGHT, rules = [[1, 3], [2, 3, 4]])
-    @window = window
+  #[[3], [1, 2, 3, 4, 5]]
+  #[[3], [4, 5, 6, 7, 8]]
+  #[[1, 3], [2, 3, 4]]
+  #[[3], [2, 3]]
+  def initialize( width = WIDTH, height = HEIGHT, rules = [[3], [4, 5, 6, 7, 8]])
     @width = width
     @height = height
     @rules = rules
     @generations = 0
 
-    @x_factor = @width/window.width
-    @y_factor = @height/window.height
-    @buffer1 = Array.new(height) { |y| Array.new(width) { |x| Cell.new(x*5, y*5) } }
-    @world = @buffer1
+    @cells = Array.new(width) { |x| Array.new(height) { |y| Cell.new(x, y) } }
   end
 
   def revive_around(x, y)
     neighborhood.each do |pos|
-      @world[(y + pos[0]) % @height][(x + pos[1]) % @width].live
+      @cells[(x/@y_factor + pos[0]) % @width][(y/@x_factor + pos[1]) % @height].live
     end
+  end
+
+  def[](index)
+    @cells[index]
   end
 
   def kill_all
@@ -48,48 +49,41 @@ class World
   def update
     @generations += 1
 
-    @world.each_with_index { |row, y|
-      row.each_with_index { |cell, x|
+    @cells.each_with_index { |col, x|
+      col.each_with_index { |cell, y|
     #each_with_index {|cell, x, y|
-        neighbors = alive_neighbours(x, y)
+        neighbors_count = alive_neighbours(x, y)
         case cell.state
           when :alive
-            cell.die unless rules[1].include? neighbors
+            cell.die unless rules[1].include? neighbors_count
           when :dead
-            cell.live if rules[0].include? neighbors
+            cell.live if rules[0].include? neighbors_count
         end
       }
     }
-
     each &:switch_to_next_state
-
-    if @window.button_down? Gosu::MsLeft
-      revive_around((@window.mouse_x/5), (@window.mouse_y/5))
-    end
   end
 
   def each(&block)
-    @world.each { |row|
+    @cells.each { |row|
       row.each { |cell|
-        block.call cell
-      }
+        block.call cell }
     }
   end
 
   def each_with_index(&block)
-    @world.each_with_index { |row, y|
-      row.each { |cell, x|
-        block.call cell, x, y
-      }
+    @cells.each_with_index { |row, x|
+      row.each { |cell, y|
+        block.call cell, x, y }
     }
   end
 
   def alive_neighbours(x, y)
     [[-1, 0], [1, 0], # sides
-     [-1, 1], [0, 1], [1, 1], # over
-     [-1, -1], [0, -1], [1, -1] # under
+    [-1, 1], [0, 1], [1, 1], # over
+    [-1, -1], [0, -1], [1, -1] # under
     ].inject(0) do |sum, pos|
-      sum +=1 if @world[(x + pos[0]) % @height][(y + pos[1]) % @width].alive?
+      sum +=1 if @cells[(x + pos[0]) % width][(y + pos[1]) % @height].alive?
       sum
     end
   end
@@ -109,13 +103,16 @@ class World
   end
 
   def draw(window)
-    @world.each { |row|
-      row.each { |cell| cell.draw window } }
+
+    @x_factor = window.width/@width
+    @y_factor = window.height/@height
+
+    each{|cell| cell.draw window, @x_factor, @y_factor}
   end
 
   def to_s
-    @world.each { |row|
-      row.each { |cell| print cell.alive? ? '0' : '.' }
+    @cells.each { |col|
+      col.each { |cell| print cell.alive? ? '0' : '.' }
       puts '\n'
     }
   end
