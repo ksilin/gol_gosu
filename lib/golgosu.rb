@@ -46,6 +46,8 @@ class Golgosu < Hasu::Window
         @world.kill_all
       when Gosu::KbF
         @world.revive_all
+      when Gosu::KbSpace
+        @world.next_rule
     end
   end
 

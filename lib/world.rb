@@ -9,16 +9,26 @@ class World
   WIDTH = 100
   HEIGHT = 60
 
-  # default rules B3S23
-  # Any live cell with fewer than two live neighbours dies, as if caused by under-population.
-  # Any live cell with two or three live neighbours lives on to the next generation.
-  # Any live cell with more than three live neighbours dies, as if by overcrowding.
-  # Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
-  #[[3, 6, 7, 8], [3, 4, 6, 7, 8]]
-  #[[3], [1, 2, 3, 4, 5]]
-  #[[3], [4, 5, 6, 7, 8]]
-  #[[1, 3], [2, 3, 4]]
-  #[[3], [2, 3]]
+  # rules in B[]S[] format
+  # default rule: B3S23
+
+  RULES = {:original => [[3], [2, 3]],
+           :highlife => [[3, 6], [2, 3]],
+           :seeds => [[2],[]],
+           :live_free_or_die => [[2],[0]],
+           :dotlife => [[3],[0, 2, 3]],
+           :mazectric => [[3],[1, 2, 3, 4]],
+           :coral => [[3], [4, 5, 6, 7, 8]],
+           :maze => [[3], [1, 2, 3, 4, 5]],
+  }
+
+  ODD_RULES = {
+      :gnarl => [[1],[1]],
+      :replicator => [[1, 3, 5, 7],[1, 3, 5, 7]],
+      :fredkin => [[1, 3, 5, 7], [0, 2, 4, 6, 8]],
+  }
+
+
   def initialize( width = WIDTH, height = HEIGHT, rules = [[3], [4, 5, 6, 7, 8]])
     @width = width
     @height = height
@@ -27,6 +37,13 @@ class World
 
     @cells = Array.new(width) { |x| Array.new(height) { |y| Cell.new(x, y) } }
   end
+
+  def next_rule
+    new_rule_name = RULES.keys.sample
+    p "switching to #{new_rule_name}"
+    @rules = RULES[new_rule_name]
+  end
+
 
   def revive_around(x, y)
     neighborhood.each do |pos|
