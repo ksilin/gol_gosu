@@ -46,4 +46,8 @@ describe 'Initialization' do
     world.to_s
   end
 
+  it 'should rotate the array' do
+    p World::GLIDER.transpose.map &:reverse
+  end
+
 end

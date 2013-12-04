@@ -1,5 +1,6 @@
 require 'hasu'
-Hasu.load 'cell.rb'
+#Hasu.load 'cell.rb'
+require_relative 'cell.rb'
 
 class World
   include Enumerable
@@ -28,10 +29,15 @@ class World
       :fredkin => [[1, 3, 5, 7], [0, 2, 4, 6, 8]],
   }
 
+  GLIDER = [[:die, :live, :live],
+            [:live, :live, :die],
+            [:die, :live, :die]]
 
-  def initialize( width = WIDTH, height = HEIGHT, rules = [[3], [4, 5, 6, 7, 8]])
+
+  def initialize( width = WIDTH, height = HEIGHT, rules = :coral)
     @width = width
     @height = height
+    @running = true
     @rules = rules
     @generations = 0
 
@@ -39,11 +45,20 @@ class World
   end
 
   def next_rule
-    new_rule_name = RULES.keys.sample
-    p "switching to #{new_rule_name}"
-    @rules = RULES[new_rule_name]
+    @rules = RULES.keys[(RULES.keys.index(@rules) + 1)%RULES.keys.size]
+    p "switching to #{@rules}"
   end
 
+
+  def draw_glider(x, y)
+    neighborhood.each do |pos|
+      x_index = (x/@y_factor + pos[0]) % @width
+      y_index = (y/@x_factor + pos[1]) % @height
+      cell = @cells[x_index][y_index]
+      #GLIDER = GLIDER.transpose.map &:reverse
+      cell.send GLIDER[pos[0]][pos[1]]
+    end
+  end
 
   def revive_around(x, y)
     neighborhood.each do |pos|
@@ -64,19 +79,18 @@ class World
   end
 
   def update
+    return unless @running
+
     @generations += 1
 
-    @cells.each_with_index { |col, x|
-      col.each_with_index { |cell, y|
-    #each_with_index {|cell, x, y|
+    each_with_indices {|cell, x, y|
         neighbors_count = alive_neighbours(x, y)
         case cell.state
           when :alive
-            cell.die unless rules[1].include? neighbors_count
+            cell.die unless RULES[@rules][1].include? neighbors_count
           when :dead
-            cell.live if rules[0].include? neighbors_count
+            cell.live if RULES[@rules][0].include? neighbors_count
         end
-      }
     }
     each &:switch_to_next_state
   end
@@ -88,10 +102,11 @@ class World
     }
   end
 
-  def each_with_index(&block)
-    @cells.each_with_index { |row, x|
-      row.each { |cell, y|
-        block.call cell, x, y }
+  def each_with_indices(&block)
+    @cells.each_with_index { |col, x|
+      col.each_with_index { |cell, y|
+        block.call cell, x, y
+      }
     }
   end
 
@@ -132,6 +147,10 @@ class World
       col.each { |cell| print cell.alive? ? '0' : '.' }
       puts '\n'
     }
+  end
+
+  def toggle_pause
+    @running = !@running
   end
 
 end
