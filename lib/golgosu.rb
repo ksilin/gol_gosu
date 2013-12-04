@@ -52,6 +52,8 @@ class Golgosu < Hasu::Window
         @world.next_rule
       when Gosu::KbP
         @world.toggle_pause
+      when Gosu::KbB
+        @world.switch_brush
     end
   end
 
