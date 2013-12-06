@@ -35,9 +35,9 @@ class Golgosu < Hasu::Window
   def draw
     @world.draw self
     #@font.draw(@frames, 30, 20, 0)
-    #@font.draw("gen #{@world.generations}", 30, 20, 0)
-    #@font.draw("alive: #{@world.alive_cells}", WIDTH - 100, 30, 0)
-    @font.draw("fps: #{Gosu.fps}", 30, 50, 0)
+    @font.draw("gen #{@world.generations}", 30, 20, 0)
+    @font.draw("alive: #{@world.alive_cells}", WIDTH - 100, 20, 0)
+    #@font.draw("fps: #{Gosu.fps}", 30, 50, 0)
   end
 
   def button_down(id)

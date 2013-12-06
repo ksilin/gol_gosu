@@ -30,7 +30,7 @@ class World
       :fredkin => [[1, 3, 5, 7], [0, 2, 4, 6, 8]],
   }
 
-  def initialize(width = WIDTH, height = HEIGHT, rules = :coral)
+  def initialize(width = WIDTH, height = HEIGHT, rules = :original)
     @width = width
     @height = height
     @running = true
@@ -61,12 +61,6 @@ class World
   def switch_brush
     @brush.next
   end
-
-  #def revive_around(x, y)
-  #  neighborhood.each do |pos|
-  #    @cells[(x/@y_factor + pos[0]) % @width][(y/@x_factor + pos[1]) % @height].live
-  #  end
-  #end
 
   def [](index)
     @cells[index]
