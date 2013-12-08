@@ -33,7 +33,7 @@ iterations = 10
   }
 
   Benchmark.bm do |bm|
-    bm.report do
+    bm.report('hash of arrays :') do
       iterations.times do
         (0...n).each { |x|
           (0...n).each { |y|
@@ -43,7 +43,7 @@ iterations = 10
       end
     end
 
-    bm.report do
+    bm.report('array of arrays:') do
       iterations.times do
         (0...n).each { |x|
           (0...n).each { |y|
@@ -53,7 +53,7 @@ iterations = 10
       end
     end
 
-    bm.report do
+    bm.report('flat hash      :') do
       iterations.times do
         (0...n).each { |x|
           (0...n).each { |y|
