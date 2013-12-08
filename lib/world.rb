@@ -78,7 +78,6 @@ class World
     return unless @running
 
     @generations += 1
-
     each_with_indices { |cell, x, y|
       neighbors_count = alive_neighbours(x, y)
       case cell.state
@@ -131,11 +130,11 @@ class World
   end
 
   def draw(window)
-
     @x_factor = window.width/@width
     @y_factor = window.height/@height
-
-    each { |cell| cell.draw window, @x_factor, @y_factor }
+    window.scale(@x_factor, @y_factor, 0, 0) {
+    each { |cell| cell.draw window}
+    }
   end
 
   def to_s
