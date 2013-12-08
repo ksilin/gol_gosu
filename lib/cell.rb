@@ -34,9 +34,9 @@ class Cell
   end
 
   def left; @x; end
-  def right; @x + 1; end
+  def right; @x + 0.9; end
   def top; @y; end
-  def bottom; @y + 1; end
+  def bottom; @y + 0.9; end
 
   def draw(window)
     window.draw_quad(
