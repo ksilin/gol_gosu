@@ -20,7 +20,6 @@ describe 'Initialization' do
     world.kill_all
     world.update
     world.to_s
-    # crazy y, x coords
     world[0][0].live
     world[1][0].live
     world[2][0].live
@@ -35,7 +34,6 @@ describe 'Initialization' do
     world.kill_all
     world.update
     world.to_s
-    # crazy y, x coords
     world[1][1].live
     world.update
 
