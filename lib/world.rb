@@ -152,7 +152,7 @@ class World
 
   def to_s
     @cells.each { |col|
-      col.each { |cell| print cell.alive? ? '0' : '.' }
+      col[1].each { |cell| print cell.alive? ? '0' : '.' }
       puts '\n'
     }
   end

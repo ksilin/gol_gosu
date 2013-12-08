@@ -35,7 +35,6 @@ describe 'Initialization' do
     world.kill_all
     world.update
     world.to_s
-    # crazy y, x coords
     world[1][1].live
     world.update
 
@@ -47,7 +46,8 @@ describe 'Initialization' do
   end
 
   it 'should rotate the array' do
-    p World::GLIDER.transpose.map &:reverse
+    p [[:top_left, :top_right],
+       [:bottom_left, :bottom_right]].transpose.map &:reverse
   end
 
 end
