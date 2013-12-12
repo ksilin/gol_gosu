@@ -99,6 +99,7 @@ class World
       end
     }
     each &:switch_to_next_state
+    nil
   end
 
   def each(&block)
@@ -143,18 +144,30 @@ class World
   end
 
   def draw(window)
-
     @x_factor = window.width/@width
     @y_factor = window.height/@height
 
     each { |cell| cell.draw window, @x_factor, @y_factor }
   end
 
+# ௵,  ࿋, ℺, ▉, ■
   def to_s
-    @cells.each { |col|
-      col[1].each { |cell| print cell.alive? ? '0' : '.' }
-      puts '\n'
+    @cells.reduce('') { |columns, col|
+      columns + col[1].reduce('') { |row, cell| row + (cell.alive? ? '■' : ' ') } + "\n"
     }
+  end
+
+  def clear
+    (@height).times { print "\r\e[A\e[K" }
+  end
+
+  def run
+    loop do
+      update
+      clear
+      puts to_s
+      sleep 0.1
+    end
   end
 
   def toggle_pause
