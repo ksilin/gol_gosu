@@ -37,8 +37,17 @@ class World
     @rules = rules
     @generations = 0
     @brush = Brush.new(:glider)
+    @cells = Hash.new{|h, k| h[k] = []}
 
-    @cells = Array.new(width) { |x| Array.new(height) { |y| Cell.new(x, y) } }
+    (0...width).each{|x|
+      (0...height).each{|y|
+        @cells[x][y] = Cell.new(x, y)
+      }
+    }
+    p @cells.size
+    p @cells[0]
+    p @cells[0].size
+    #@cells = Array.new(width) { |x| Array.new(height) { |y| Cell.new(x, y) } }
   end
 
   def next_rule
@@ -49,8 +58,9 @@ class World
 
   def draw_glider(x, y)
     neighborhood.each do |pos|
-      x_index = (x/@y_factor + pos[0]) % @width
-      y_index = (y/@x_factor + pos[1]) % @height
+      x_index = ((x/@y_factor + pos[0]) % @width).round
+      y_index =((y/@x_factor + pos[1]) % @height).round
+
       cell = @cells[x_index][y_index]
       # TODO rotate the brush
       #GLIDER = GLIDER.transpose.map &:reverse
@@ -88,18 +98,21 @@ class World
       end
     }
     each &:switch_to_next_state
+    nil
   end
 
   def each(&block)
-    @cells.each { |row|
-      row.each { |cell|
+    @cells.each { |col|
+      col[1].each { |cell|
+        #p "executing block on #{cell}"
         block.call cell }
     }
   end
 
   def each_with_indices(&block)
     @cells.each_with_index { |col, x|
-      col.each_with_index { |cell, y|
+      col[1].each_with_index { |cell, y|
+        #p "executing block on #{cell} at #{x}, #{y}"
         block.call cell, x, y
       }
     }
@@ -137,11 +150,24 @@ class World
     }
   end
 
+# ௵,  ࿋, ℺, ▉, ■, ☀, ☺
   def to_s
-    @cells.each { |col|
-      col.each { |cell| print cell.alive? ? '0' : '.' }
-      puts '\n'
+    @cells.reduce('') { |columns, col|
+      columns + col[1].reduce('') { |row, cell| row + (cell.alive? ? '☺' : ' ') } + "\n"
     }
+  end
+
+  def clear
+    (@height).times { print "\r\e[A\e[K" }
+  end
+
+  def run
+    loop do
+      update
+      clear
+      puts to_s
+      sleep 0.1
+    end
   end
 
   def toggle_pause
