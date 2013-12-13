@@ -21,11 +21,7 @@ class World
     @brush = Brush.new(:glider)
     @cells = Hash.new{|h, k| h[k] = []}
 
-    (0...width).each{|x|
-      (0...height).each{|y|
-        @cells[x][y] = Cell.new(x, y)
-      }
-    }
+    @cells = Array.new(width) { |x| Array.new(height) { |y| Cell.new(x, y) } }
   end
 
   def next_rule
@@ -34,8 +30,8 @@ class World
 
   def draw_glider(x, y)
     neighborhood.each do |pos|
-      x_index = ((x/@y_factor + pos[0]) % @width).round
-      y_index =((y/@x_factor + pos[1]) % @height).round
+      x_index = (x/@y_factor + pos[0]) % @width
+      y_index = (y/@x_factor + pos[1]) % @height
 
       cell = @cells[x_index][y_index]
       # TODO rotate the brush
@@ -69,14 +65,14 @@ class World
 
   def each(&block)
     @cells.each { |col|
-      col[1].each { |cell|
+      col.each { |cell|
         block.call cell }
     }
   end
 
   def each_with_indices(&block)
     @cells.each_with_index { |col, x|
-      col[1].each_with_index { |cell, y|
+      col.each_with_index { |cell, y|
         block.call cell, x, y
       }
     }
@@ -86,21 +82,21 @@ class World
     [[-1, 0], [1, 0], # sides
      [-1, 1], [0, 1], [1, 1], # over
      [-1, -1], [0, -1], [1, -1] # under
-    ].inject(0) do |sum, pos|
+    ].reduce(0) do |sum, pos|
       sum +=1 if @cells[(x + pos[0]) % width][(y + pos[1]) % @height].alive?
       sum
     end
   end
 
   def alive_cells
-    inject(0) { |sum, cell|
+    reduce(0) { |sum, cell|
       sum +=1 if :alive == cell.state
       sum
     }
   end
 
   def neighborhood(x=0, y=0)
-    (x-1..x+1).to_a.inject([]) { |neighbors, x1|
+    (x-1..x+1).to_a.reduce([]) { |neighbors, x1|
       (y-1..y+1).to_a.each { |y1| neighbors << [x1, y1] }
       neighbors
     }
@@ -110,14 +106,14 @@ class World
     @x_factor = window.width/@width
     @y_factor = window.height/@height
     window.scale(@x_factor, @y_factor, 0, 0) {
-    each { |cell| cell.draw window}
+      each { |cell| cell.draw window}
     }
   end
 
 # ௵,  ࿋, ℺, ▉, ■, ☀, ☺
   def to_s
     @cells.reduce('') { |columns, col|
-      columns + col[1].reduce('') { |row, cell| row + (cell.alive? ? '☺' : ' ') } + "\n"
+      columns + col.reduce('') { |row, cell| row + (cell.alive? ? '#' : ' ') } + "\n"
     }
   end
 
