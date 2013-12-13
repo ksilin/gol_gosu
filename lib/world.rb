@@ -86,21 +86,21 @@ class World
     [[-1, 0], [1, 0], # sides
      [-1, 1], [0, 1], [1, 1], # over
      [-1, -1], [0, -1], [1, -1] # under
-    ].inject(0) do |sum, pos|
+    ].reduce(0) do |sum, pos|
       sum +=1 if @cells[(x + pos[0]) % width][(y + pos[1]) % @height].alive?
       sum
     end
   end
 
   def alive_cells
-    inject(0) { |sum, cell|
+    reduce(0) { |sum, cell|
       sum +=1 if :alive == cell.state
       sum
     }
   end
 
   def neighborhood(x=0, y=0)
-    (x-1..x+1).to_a.inject([]) { |neighbors, x1|
+    (x-1..x+1).to_a.reduce([]) { |neighbors, x1|
       (y-1..y+1).to_a.each { |y1| neighbors << [x1, y1] }
       neighbors
     }
