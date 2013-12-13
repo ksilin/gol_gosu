@@ -1,5 +1,7 @@
 # Golgosu
 
+[![Code Climate](https://codeclimate.com/github/ksilin/gol_gosu.png)](https://codeclimate.com/github/ksilin/gol_gosu)
+
 TODO: Write a gem description
 
 ## Installation
