@@ -1,4 +1,5 @@
 require 'hasu'
+require 'colorize'
 #Hasu.load 'cell.rb'
 require_relative 'cell.rb'
 require_relative 'brush.rb'
@@ -112,8 +113,13 @@ class World
 
 # ௵,  ࿋, ℺, ▉, ■, ☀, ☺
   def to_s
+
+    alive_ansi = '#'.colorize(:green)
+    dead_ansi = ' '#.colorize(:red)
+
     @cells.reduce('') { |columns, col|
-      columns + col.reduce('') { |row, cell| row + (cell.alive? ? '#' : ' ') } + "\n"
+      columns + col.reduce('') { |row, cell|
+      row + (cell.alive? ? alive_ansi : dead_ansi) } + "\n"
     }
   end
 
@@ -126,7 +132,7 @@ class World
       update
       clear
       puts to_s
-      sleep 0.1
+      sleep 0.2
     end
   end
 
