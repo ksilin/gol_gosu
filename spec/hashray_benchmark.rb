@@ -24,7 +24,13 @@ iterations = 10
 
   ary = (0...n).map { Array.new(n, 1) }
 
-  # TODO - why doesnt inject work here properly?
+  #perhaps it's the ad-hoc array creation?
+  prepared_indices = (0...n).each_with_object([]) { |x, ind|
+    (0...n).each { |y|
+      ind << [x, y]
+    }
+  }
+
   hash = {}
   (0...n).each { |x|
     (0...n).each { |y|
@@ -55,10 +61,8 @@ iterations = 10
 
     bm.report('flat hash:') do
       iterations.times do
-        (0...n).each { |x|
-          (0...n).each { |y|
-            v = hash[[x, y]]
-          }
+        prepared_indices.each { |i|
+          v = hash[i]
         }
       end
     end
