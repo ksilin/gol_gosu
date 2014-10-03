@@ -14,6 +14,8 @@ class Golgosu < Hasu::Window
 
   def reset
     @world = World.new(128, 96)
+    @x_factor = width/@world.width
+    @y_factor = height/@world.height
     @frames = 0
     @elapsed_time = 0
     @font = Gosu::Font.new(self, 'Arial', 24)
@@ -27,21 +29,31 @@ class Golgosu < Hasu::Window
     end
 
     if button_down? Gosu::MsLeft
-      @world.draw_glider(mouse_x, mouse_y)
+      puts "drawing glider at #{mouse_x/@x_factor}, #{mouse_y/@y_factor}"
+      @world.draw_glider(mouse_x/@x_factor, mouse_y/@y_factor)
       #@world.revive_around(mouse_x, mouse_y)
     end
   end
 
   def draw
-    @x_factor = window.width/@width
-    @y_factor = window.height/@height
+
     scale(@x_factor, @y_factor, 0, 0) {
-      @world.each { |cell| cell.draw window}
+      @world.each { |cell| draw_cell(cell)}
     }
     #@font.draw(@frames, 30, 20, 0)
     @font.draw("gen #{@world.generations}", 30, 20, 0)
     @font.draw("alive: #{@world.alive_cells}", WIDTH - 100, 20, 0)
     @font.draw("fps: #{Gosu.fps}", 30, 50, 0)
+  end
+
+
+  def draw_cell(cell)
+    color = cell.alive? ? Gosu::Color::GREEN : Gosu::Color::BLACK
+    draw_quad(
+        cell.left, cell.top, color,
+        cell.right, cell.top, color,
+        cell.right, cell.bottom, color,
+        cell.left, cell.bottom, color)
   end
 
   def button_down(id)

@@ -39,11 +39,4 @@ class Cell
   def top; @y; end
   def bottom; @y + 0.9; end
 
-  # def draw(window)
-  #   window.draw_quad(
-  #       left, top, color,
-  #       right, top, color,
-  #       right, bottom, color,
-  #       left, bottom, color)
-  # end
 end

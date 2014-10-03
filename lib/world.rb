@@ -1,7 +1,7 @@
 #Hasu.load 'cell.rb'
-require 'cell.rb'
-require 'brush.rb'
-require 'rules.rb'
+require_relative 'cell.rb'
+require_relative 'brush.rb'
+require_relative 'rules.rb'
 
 class World
   include Enumerable
@@ -29,9 +29,9 @@ class World
 
   def draw_glider(x, y)
     neighborhood.each do |pos|
-      x_index = (x/@y_factor + pos[0]) % @width
-      y_index = (y/@x_factor + pos[1]) % @height
-
+      x_index = (x + pos[0]) % @width
+      y_index = (y + pos[1]) % @height
+      puts "world: drawing glider at #{x_index}, #{y_index}"
       cell = @cells[x_index][y_index]
       # TODO rotate the brush
       #GLIDER = GLIDER.transpose.map &:reverse
