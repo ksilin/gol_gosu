@@ -32,6 +32,6 @@ class Rules
   def apply(cell, alive_neighbors)
 
     live_or_die = @rule[cell.state].include?(alive_neighbors) ? :live : :die
-    cell.send (live_or_die)
+    cell.send(live_or_die)
   end
 end

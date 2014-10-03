@@ -1,17 +1,15 @@
-require 'hasu'
-require 'colorize'
 #Hasu.load 'cell.rb'
-require_relative 'cell.rb'
-require_relative 'brush.rb'
-require_relative 'rules.rb'
+require 'cell.rb'
+require 'brush.rb'
+require 'rules.rb'
 
 class World
   include Enumerable
 
   attr_reader :width, :height, :rules, :generations
 
-  WIDTH = 100
-  HEIGHT = 60
+  WIDTH = 40
+  HEIGHT = 120
 
   def initialize(width = WIDTH, height = HEIGHT, rules = :original)
     @width = width
@@ -103,19 +101,11 @@ class World
     }
   end
 
-  def draw(window)
-    @x_factor = window.width/@width
-    @y_factor = window.height/@height
-    window.scale(@x_factor, @y_factor, 0, 0) {
-      each { |cell| cell.draw window}
-    }
-  end
-
 # ௵,  ࿋, ℺, ▉, ■, ☀, ☺
   def to_s
 
-    alive_ansi = '#'.colorize(:green)
-    dead_ansi = ' '#.colorize(:red)
+    alive_ansi = "\033[1;32mX\033[m"
+    dead_ansi = ' '
 
     @cells.reduce('') { |columns, col|
       columns + col.reduce('') { |row, cell|
@@ -124,15 +114,22 @@ class World
   end
 
   def clear
-    (@height).times { print "\r\e[A\e[K" }
+    print "\033[2J" # clearing the whole screen is more practical than deleting lines with "\r\e[A\e[K"
   end
 
-  def run
+  def self.ascii_demo
+
+    width = `tput cols`.to_i
+    height = `tput lines`.to_i
+
+    puts "world size #{width}x#{height}"
+
+    world = World.new(height, width)
     loop do
-      update
-      clear
-      puts to_s
-      sleep 0.2
+      world.update
+      world.clear
+      puts world.to_s
+      sleep 0.1
     end
   end
 

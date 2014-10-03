@@ -1,6 +1,6 @@
 class Cell
 
-  attr_reader :x, :y, :color, :state
+  attr_reader :x, :y, :state
   attr_reader :next_state
 
   def initialize(x, y, state = random_state)
@@ -24,13 +24,14 @@ class Cell
 
   def die
     @next_state = :dead
-    @color = Gosu::Color::BLACK
+
+    # @color = Gosu::Color::BLACK
   end
 
   def live
     @next_state = :alive
     @reincarnations +=1
-    @color = Gosu::Color.from_hsv((@reincarnations*5)%360, 1.0, 1.0)
+    # @color = Gosu::Color.from_hsv((@reincarnations*5)%360, 1.0, 1.0)
   end
 
   def left; @x; end
@@ -38,11 +39,11 @@ class Cell
   def top; @y; end
   def bottom; @y + 0.9; end
 
-  def draw(window)
-    window.draw_quad(
-        left, top, color,
-        right, top, color,
-        right, bottom, color,
-        left, bottom, color)
-  end
+  # def draw(window)
+  #   window.draw_quad(
+  #       left, top, color,
+  #       right, top, color,
+  #       right, bottom, color,
+  #       left, bottom, color)
+  # end
 end

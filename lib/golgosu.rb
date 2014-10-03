@@ -33,7 +33,11 @@ class Golgosu < Hasu::Window
   end
 
   def draw
-    @world.draw self
+    @x_factor = window.width/@width
+    @y_factor = window.height/@height
+    scale(@x_factor, @y_factor, 0, 0) {
+      @world.each { |cell| cell.draw window}
+    }
     #@font.draw(@frames, 30, 20, 0)
     @font.draw("gen #{@world.generations}", 30, 20, 0)
     @font.draw("alive: #{@world.alive_cells}", WIDTH - 100, 20, 0)
