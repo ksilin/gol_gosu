@@ -36,6 +36,7 @@ class World
       # TODO rotate the brush
       #GLIDER = GLIDER.transpose.map &:reverse
       cell.send @brush.brush[pos[0]][pos[1]]
+      cell.switch_to_next_state
     end
   end
 
@@ -48,11 +49,15 @@ class World
   end
 
   def kill_all
+    $stderr.puts 'killing everybody'
     each &:die
+    each &:switch_to_next_state
   end
 
   def revive_all
+    $stderr.puts 'reviving everybody'
     each &:live
+    each &:switch_to_next_state
   end
 
   def update

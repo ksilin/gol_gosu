@@ -38,7 +38,7 @@ class Golgosu < Hasu::Window
   def draw
 
     scale(@x_factor, @y_factor, 0, 0) {
-      @world.each { |cell| draw_cell(cell)}
+      @world.each { |cell| draw_cell(cell) }
     }
     #@font.draw(@frames, 30, 20, 0)
     @font.draw("gen #{@world.generations}", 30, 20, 0)
@@ -48,7 +48,7 @@ class Golgosu < Hasu::Window
 
 
   def draw_cell(cell)
-    color = cell.alive? ? Gosu::Color::GREEN : Gosu::Color::BLACK
+    color = cell.alive? ? Gosu::Color.from_hsv((cell.reincarnations*5)%360, 1.0, 1.0) : Gosu::Color::BLACK
     draw_quad(
         cell.left, cell.top, color,
         cell.right, cell.top, color,
