@@ -1,5 +1,7 @@
 require 'benchmark'
 
+# While I'm at it - add string keys to further degrade the hash performance
+
 class Hashray
 
   def initialize
@@ -17,7 +19,7 @@ end
 
 iterations = 10
 
-[10, 100, 1000].each do |n|
+[10, 500].each do |n|
 
   hashray = Hashray.new
   (0...n).each { |index| hashray[index] = Array.new(n, 1) }
