@@ -1,5 +1,10 @@
 require 'benchmark'
 
+# There are worlds of performance between access times
+# for an array of arrays and for a flat hash - enjoy
+
+# http://stackoverflow.com/questions/25154357
+
 # While I'm at it - add string keys to further degrade the hash performance
 
 class Hashray
