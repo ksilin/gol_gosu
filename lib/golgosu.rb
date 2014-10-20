@@ -1,7 +1,8 @@
 require 'hasu'
 
 require_relative 'world'
-require_relative 'cell_renderer'
+require_relative 'ui/cell_renderer'
+require_relative 'ui/osd_renderer'
 
 class Golgosu < Hasu::Window
 
@@ -10,6 +11,7 @@ class Golgosu < Hasu::Window
 
   def initialize
     super(WIDTH, HEIGHT, false)
+    @osd = OsdRenderer.new(self)
   end
 
   def reset
@@ -18,7 +20,6 @@ class Golgosu < Hasu::Window
     @y_factor = height/@world.height
     @frames = 0
     @elapsed_time = 0
-    @font = Gosu::Font.new(self, 'Arial', 24)
   end
 
   def update
@@ -29,18 +30,15 @@ class Golgosu < Hasu::Window
     end
 
     if button_down? Gosu::MsLeft
-      @world.draw_glider(mouse_x/@x_factor, mouse_y/@y_factor)
+      @world.add_glider((mouse_x/@x_factor).round, (mouse_y/@y_factor).round)
     end
   end
 
   def draw
-
     scale(@x_factor, @y_factor, 0, 0) {
       @world.each { |cell| CellRenderer.draw(cell, self) }
     }
-    @font.draw("gen #{@world.generations}", 30, 20, 0)
-    @font.draw("alive: #{@world.alive_cells}", WIDTH - 100, 20, 0)
-    @font.draw("fps: #{Gosu.fps}", 30, 50, 0)
+    @osd.draw(@world)
   end
 
 

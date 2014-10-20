@@ -1,17 +1,17 @@
 class Brush
 
   BRUSHES = {
-  :glider => [[:die, :live, :live],
-            [:live, :live, :die],
-            [:die, :live, :die]],
+  :glider => [[:dead, :alive, :alive],
+            [:alive, :alive, :dead],
+            [:dead, :alive, :dead]],
 
-  :life => [[:live, :live, :live],
-          [:live, :live, :live],
-          [:live, :live, :live]],
+  :life => [[:alive, :alive, :alive],
+          [:alive, :alive, :alive],
+          [:alive, :alive, :alive]],
 
-  :death => [[:die, :die, :die],
-           [:die, :die, :die],
-           [:die, :die, :die]]
+  :death => [[:dead, :dead, :dead],
+           [:dead, :dead, :dead],
+           [:dead, :dead, :dead]]
   }
 
   attr_accessor :brush_name
@@ -23,7 +23,7 @@ class Brush
   def next
     keys = BRUSHES.keys
     @brush_name = keys[(keys.index(@brush_name) + 1)%keys.size]
-    p "switching to #{@brush_name}"
+    $stderr.puts "switching to #{@brush_name}"
   end
 
   def brush

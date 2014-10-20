@@ -17,7 +17,7 @@ class World
     @rules = Rules.new(rules)
     @generations = 0
     @brush = Brush.new(:glider)
-    @cells = Hash.new{|h, k| h[k] = []}
+    @cells = Hash.new { |h, k| h[k] = [] }
 
     @cells = Array.new(width) { |x|
       Array.new(height) { |y|
@@ -34,15 +34,15 @@ class World
     @rules.next
   end
 
-  def draw_glider(x, y)
+  def add_glider(x, y)
+    puts "world: drawing glider at #{x}, #{y}"
     neighborhood.each do |pos|
       x_index = (x + pos[0]) % @width
       y_index = (y + pos[1]) % @height
-      puts "world: drawing glider at #{x_index}, #{y_index}"
       cell = @cells[x_index][y_index]
       # TODO rotate the brush
       #GLIDER = GLIDER.transpose.map &:reverse
-      cell.send @brush.brush[pos[0]][pos[1]]
+      cell.next_state = @brush.brush[pos[0]][pos[1]]
       cell.switch_to_next_state
     end
   end
@@ -57,13 +57,13 @@ class World
 
   def kill_all
     $stderr.puts 'killing everybody'
-    each {|c| c.next_state = :dead}
+    each { |c| c.next_state = :dead }
     each &:switch_to_next_state
   end
 
   def revive_all
     $stderr.puts 'reviving everybody'
-    each {|c| c.next_state = :alive}
+    each { |c| c.next_state = :alive }
     each &:switch_to_next_state
   end
 
@@ -125,7 +125,7 @@ class World
 
     @cells.reduce('') { |columns, col|
       columns + col.reduce('') { |row, cell|
-      row + (cell.alive? ? alive_ansi : dead_ansi) } + "\n"
+        row + (cell.alive? ? alive_ansi : dead_ansi) } + "\n"
     }
   end
 
