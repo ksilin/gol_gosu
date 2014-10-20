@@ -1,7 +1,7 @@
 require 'hasu'
 
-#Hasu.load 'world.rb'
 require_relative 'world'
+require_relative 'cell_renderer'
 
 class Golgosu < Hasu::Window
 
@@ -24,37 +24,25 @@ class Golgosu < Hasu::Window
   def update
     @frames +=1
 
-    if (@frames % 1 == 0)
+    if (@frames % 3 == 0)
       @world.update
     end
 
     if button_down? Gosu::MsLeft
-      puts "drawing glider at #{mouse_x/@x_factor}, #{mouse_y/@y_factor}"
       @world.draw_glider(mouse_x/@x_factor, mouse_y/@y_factor)
-      #@world.revive_around(mouse_x, mouse_y)
     end
   end
 
   def draw
 
     scale(@x_factor, @y_factor, 0, 0) {
-      @world.each { |cell| draw_cell(cell) }
+      @world.each { |cell| CellRenderer.draw(cell, self) }
     }
-    #@font.draw(@frames, 30, 20, 0)
     @font.draw("gen #{@world.generations}", 30, 20, 0)
     @font.draw("alive: #{@world.alive_cells}", WIDTH - 100, 20, 0)
     @font.draw("fps: #{Gosu.fps}", 30, 50, 0)
   end
 
-
-  def draw_cell(cell)
-    color = cell.alive? ? Gosu::Color.from_hsv((cell.reincarnations*5)%360, 1.0, 1.0) : Gosu::Color::BLACK
-    draw_quad(
-        cell.left, cell.top, color,
-        cell.right, cell.top, color,
-        cell.right, cell.bottom, color,
-        cell.left, cell.bottom, color)
-  end
 
   def button_down(id)
     case id

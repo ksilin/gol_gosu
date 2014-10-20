@@ -20,9 +20,9 @@ describe 'Initialization' do
     world.kill_all
     world.update
     puts world.to_s + "\n"
-    world[0][0].live
-    world[0][1].live
-    world[0][2].live
+    world[0][0].next_state = :alive
+    world[0][1].next_state = :alive
+    world[0][2].next_state = :alive
     world.update
     puts world.to_s + "\n"
     world.update
@@ -34,10 +34,8 @@ describe 'Initialization' do
     world.kill_all
     world.update
     puts world.to_s + "\n"
-    world[1][1].live
+    world[1][1].next_state = :alive
     world.update
-
-    #p world.neighborhood(1, 1)
 
     puts world.to_s  + "\n"
     world.update

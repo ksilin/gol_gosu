@@ -1,4 +1,3 @@
-#Hasu.load 'cell.rb'
 require_relative 'cell.rb'
 require_relative 'brush.rb'
 require_relative 'rules.rb'
@@ -20,7 +19,15 @@ class World
     @brush = Brush.new(:glider)
     @cells = Hash.new{|h, k| h[k] = []}
 
-    @cells = Array.new(width) { |x| Array.new(height) { |y| Cell.new(x, y) } }
+    @cells = Array.new(width) { |x|
+      Array.new(height) { |y|
+        Cell.new(x, y, random_state)
+      }
+    }
+  end
+
+  def random_state
+    rand > 0.5 ? :alive : :dead
   end
 
   def next_rule
@@ -50,27 +57,31 @@ class World
 
   def kill_all
     $stderr.puts 'killing everybody'
-    each &:die
+    each {|c| c.next_state = :dead}
     each &:switch_to_next_state
   end
 
   def revive_all
     $stderr.puts 'reviving everybody'
-    each &:live
+    each {|c| c.next_state = :alive}
     each &:switch_to_next_state
   end
 
   def update
     return unless @running
     @generations += 1
-    each_with_indices { |cell, x, y| @rules.apply(cell, alive_neighbours(x, y)) }
+    each_with_indices { |cell, x, y|
+      next_state = @rules.next_state(cell.state, alive_neighbours(x, y))
+      cell.next_state = next_state
+    }
     each &:switch_to_next_state
   end
 
   def each(&block)
     @cells.each { |col|
       col.each { |cell|
-        block.call cell }
+        block.call cell
+      }
     }
   end
 

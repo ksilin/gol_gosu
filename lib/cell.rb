@@ -1,39 +1,21 @@
 class Cell
 
   attr_reader :x, :y, :state, :reincarnations
-  attr_reader :next_state
+  attr_accessor :next_state
 
-  def initialize(x, y, state = random_state)
+  def initialize(x, y, state)
     @x, @y = x, y
     @state, @next_state = state
     @reincarnations = 0
-    alive? ? live : die
   end
 
   def switch_to_next_state
     @state = @next_state
+    @reincarnations +=1 if :alive == state
   end
 
   def alive?
     :alive == state
   end
-
-  def random_state
-    rand > 0.5 ? :alive : :dead
-  end
-
-  def die
-    @next_state = :dead
-  end
-
-  def live
-    @next_state = :alive
-    @reincarnations +=1
-  end
-
-  def left; @x; end
-  def right; @x + 0.9; end
-  def top; @y; end
-  def bottom; @y + 0.9; end
 
 end
