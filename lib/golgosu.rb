@@ -8,6 +8,7 @@ class Golgosu < Hasu::Window
 
   WIDTH = 640
   HEIGHT = 480
+  FRAMES_PER_UPDATE = 3;
 
   def initialize
     super(WIDTH, HEIGHT, false)
@@ -24,23 +25,20 @@ class Golgosu < Hasu::Window
 
   def update
     @frames +=1
+    @world.update if @frames.modulo(FRAMES_PER_UPDATE).zero?
+    process_synchronous_input
+  end
 
-    if (@frames % 3 == 0)
-      @world.update
-    end
+  def draw
+    scale(@x_factor, @y_factor, 0, 0) { CellRenderer.draw(@world, self) }
+    @osd.draw(@world)
+  end
 
+  def process_synchronous_input
     if button_down? Gosu::MsLeft
       @world.add_glider((mouse_x/@x_factor).round, (mouse_y/@y_factor).round)
     end
   end
-
-  def draw
-    scale(@x_factor, @y_factor, 0, 0) {
-      @world.each { |cell| CellRenderer.draw(cell, self) }
-    }
-    @osd.draw(@world)
-  end
-
 
   def button_down(id)
     case id

@@ -1,7 +1,12 @@
 module CellRenderer
 
-  def self.draw(cell, window)
-    color = cell.alive? ? Gosu::Color.from_hsv((cell.reincarnations*5)%360, 1.0, 1.0) : Gosu::Color::BLACK
+  def self.draw(world, window)
+    world.each { |cell| draw_cell(cell, window) }
+  end
+
+
+  def self.draw_cell(cell, window)
+    color = cell.alive? ? Gosu::Color.from_hsv((cell.reincarnations*3)%360, 1.0, 1.0) : Gosu::Color::BLACK
     window.draw_quad(
         left(cell), top(cell), color,
         right(cell), top(cell), color,
