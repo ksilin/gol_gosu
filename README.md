@@ -1,4 +1,4 @@
-# Golgosu - A game of Life implementation in Ruby
+# Golgosu - A Game of Life implementation in Ruby
 
 [![Code Climate](https://codeclimate.com/github/ksilin/gol_gosu.png)](https://codeclimate.com/github/ksilin/gol_gosu)
 
@@ -22,13 +22,13 @@ In order to start the gosu visualization, execute `ruby lib/golgosu.rb` in your 
 
 #### Terminal-based ASCII/ANSI visualization. 
 
-Can only be started via a REPL like irb or pry:
+Can be started via a REPL like irb or pry:
  
         irb> load 'lib/world.rb'
         # => true
         irb> World.ascii_demo
 
-This implementation has only been tested on Linux. It will probably work on Mac without or with only minor adaptations. It will probably not work on Windows. 
+This implementation has been tested on Linux only. It will probably work on Mac without or with only minor adaptations. It will probably not work on Windows. 
 
 ## Contributing
 
