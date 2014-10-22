@@ -2,25 +2,33 @@
 
 [![Code Climate](https://codeclimate.com/github/ksilin/gol_gosu.png)](https://codeclimate.com/github/ksilin/gol_gosu)
 
-TODO: Write a gem description
+A game of Life implementation in Ruby. 
 
-## Installation
+The game has two UIs:
 
-Add this line to your application's Gemfile:
+* Gosu-based visualization. With colors and electrolytes! 
 
-    gem 'golgosu'
+Draw gliders on the screen with a mouse click. 
 
-And then execute:
+Change the rules by pressing <kbd>Space</kbd>
 
-    $ bundle
+In addition to the classic B3S23 rule, there are lots of different rulesets, each generating distinct patterns and behaviours. Have fun exploring. 
 
-Or install it yourself as:
+Reset the world by pressing <kbd>R</kbd>
+Pause/resume by pressing <kbd>P</kbd>
+Switch 'brushes' (instead of drawing gliders, you can kill or resurrect cells) with <kbd>B</kbd>
 
-    $ gem install golgosu
+In order to start the gosu visualization, execute `ruby lib/golgosu.rb` in your terminal.
 
-## Usage
+* Terminal-based ASCII/ANSI visualization. 
 
-TODO: Write usage instructions here
+Can only be started via a REPL like irb or pry:
+ 
+        irb> load 'lib/world.rb'
+        # => true
+        irb> World.ascii_demo
+
+This implementation has only been tested on Linux. It will probably work on Mac without or with only minor adaptations. It will probably not work on Windows. 
 
 ## Contributing
 
