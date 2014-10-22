@@ -25,13 +25,8 @@ class Rules
 
   def next
     v = RULES.values
-    @rule = v[(v.index(@rule) + 1)%v.size]
+    @rule = v[v.index(@rule) - 1]
     p "switching to #{RULES.key(@rule)}"
-  end
-
-  def apply(cell, alive_neighbors)
-    live_or_die = next_state(cell.state, alive_neighbors)
-    cell.next_state(live_or_die)
   end
 
   def next_state(state, alive_neighbors)
