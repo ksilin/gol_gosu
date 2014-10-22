@@ -19,6 +19,8 @@ In addition to the classic B3S23 rule, there are lots of different rulesets, eac
 
 In order to start the gosu visualization, execute `ruby lib/golgosu.rb` in your terminal.
 
+![gol_gosu1](https://cloud.githubusercontent.com/assets/1485569/4733127/9f2a9a92-59c4-11e4-9ad7-ad38549742c8.png)
+
 
 #### Terminal-based ASCII/ANSI visualization. 
 
@@ -27,6 +29,8 @@ Can be started via a REPL like irb or pry:
         irb> load 'lib/world.rb'
         # => true
         irb> World.ascii_demo
+
+![gol_term1](https://cloud.githubusercontent.com/assets/1485569/4733128/9f305e8c-59c4-11e4-8ea3-6ac5a3eafdca.png)
 
 This implementation has been tested on Linux only. It will probably work on Mac without or with only minor adaptations. It will probably not work on Windows. 
 
