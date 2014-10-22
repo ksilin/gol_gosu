@@ -10,6 +10,11 @@ class World
   WIDTH = 40
   HEIGHT = 120
 
+  # central cell with [0, 0] offset excluded
+  NEIGHBORHOOD_OFFSETS = [[-1, 0], [1, 0], # sides
+                          [-1, 1], [0, 1], [1, 1], # above
+                          [-1, -1], [0, -1], [1, -1]] # below
+
   def initialize(width = WIDTH, height = HEIGHT, rules = :original)
     @width = width
     @height = height
@@ -51,10 +56,7 @@ class World
   end
 
   def alive_neighbours(x, y)
-    [[-1, 0], [1, 0], # sides
-     [-1, 1], [0, 1], [1, 1], # over
-     [-1, -1], [0, -1], [1, -1] # under
-    ].count do |pos|
+    NEIGHBORHOOD_OFFSETS.count do |pos|
       @cells[(x + pos[0]) % width][(y + pos[1]) % height].alive?
     end
   end
@@ -78,6 +80,7 @@ class World
     @rules.next
   end
 
+  # TODO - pull all the brush stuff up
   def add_glider(x, y)
     neighborhood.each do |pos|
       x_index = (x + pos[0]) % @width
@@ -122,6 +125,7 @@ class World
     print "\033[2J" # clearing the whole screen is more practical than deleting lines with "\r\e[A\e[K"
   end
 
+  # TODO - should be a gem API method
   def self.ascii_demo
 
     width = `tput cols`.to_i
