@@ -1,26 +1,26 @@
-# Golgosu
+# Golgosu - A game of Life implementation in Ruby
 
 [![Code Climate](https://codeclimate.com/github/ksilin/gol_gosu.png)](https://codeclimate.com/github/ksilin/gol_gosu)
 
-A game of Life implementation in Ruby. 
+The game has two visualizations:
 
-The game has two UIs:
 
-* Gosu-based visualization. With colors and electrolytes! 
+#### Gosu-based visualization. With colors and electrolytes! 
 
-Draw gliders on the screen with a mouse click. 
+* Draw gliders on the screen with a mouse click. 
 
-Change the rules by pressing <kbd>Space</kbd>
+* Change the rules by pressing <kbd>Space</kbd>
 
 In addition to the classic B3S23 rule, there are lots of different rulesets, each generating distinct patterns and behaviours. Have fun exploring. 
 
-Reset the world by pressing <kbd>R</kbd>
-Pause/resume by pressing <kbd>P</kbd>
-Switch 'brushes' (instead of drawing gliders, you can kill or resurrect cells) with <kbd>B</kbd>
+* Reset the world by pressing <kbd>R</kbd>
+* Pause/resume by pressing <kbd>P</kbd>
+* Switch 'brushes' (instead of drawing gliders, you can kill or resurrect cells) with <kbd>B</kbd>
 
 In order to start the gosu visualization, execute `ruby lib/golgosu.rb` in your terminal.
 
-* Terminal-based ASCII/ANSI visualization. 
+
+#### Terminal-based ASCII/ANSI visualization. 
 
 Can only be started via a REPL like irb or pry:
  
